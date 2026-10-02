@@ -7,39 +7,77 @@ export default function Home() {
   const { data: session, status } = useSession();
 
   if (status === 'loading') {
-    return <div className="p-8">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <p className="text-gray-500">Loading...</p>
+      </div>
+    );
   }
 
   return (
-    <main className="min-h-screen p-8 max-w-xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Job Tracker</h1>
+    <div className="min-h-screen bg-gray-100 flex flex-col justify-between">
+      {/* Simple Navbar */}
+      <nav className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="max-w-4xl mx-auto flex justify-between items-center">
+          <h1 className="font-bold text-lg text-gray-800">Job Tracker</h1>
 
-      {!session ? (
-        <button
-          onClick={() => signIn('google')}
-          className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
-        >
-          Sign in with Google
-        </button>
-      ) : (
-        <div className="space-y-4">
-          <p>
-            Signed in as <strong>{session.user?.email}</strong>
-          </p>
-          <Link
-            href="/applications"
-            className="inline-block bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
-          >
-            Go to Applications
-          </Link>
-          <button
-            onClick={() => signOut()}
-            className="block text-sm text-gray-600 underline"
-          >
-            Sign out
-          </button>
+          {session && (
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-600">{session.user?.email}</span>
+              <button
+                onClick={() => signOut()}
+                className="text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1.5 rounded"
+              >
+                Sign out
+              </button>
+            </div>
+          )}
         </div>
-      )}
-    </main>
+      </nav>
+
+      {/* Main Content */}
+      <main className="max-w-md mx-auto px-4 py-12 w-full">
+        <div className="bg-white p-8 rounded-lg shadow border border-gray-200 text-center">
+          {!session ? (
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                Land your next job
+              </h2>
+              <p className="text-sm text-gray-600 mb-6">
+                Keep track of all your job applications in one place.
+              </p>
+
+              <button
+                onClick={() => signIn('google')}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded transition"
+              >
+                Sign in with Google
+              </button>
+            </div>
+          ) : (
+            <div>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                Welcome back!
+              </h2>
+              <p className="text-sm text-gray-600 mb-6">
+                You are logged in as {session.user?.email}
+              </p>
+
+              <Link
+                href="/applications"
+                className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition"
+              >
+                Go to Applications
+              </Link>
+            </div>
+          )}
+        </div>
+      </main>
+
+      {/* Simple Footer */}
+      <footer className="text-center py-4 text-xs text-gray-500">
+        Job Tracker App - Built with Next.js
+      </footer>
+    </div>
   );
 }
